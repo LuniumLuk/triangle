@@ -23,8 +23,8 @@ SOFTWARE.
 '''
 
 #
-# Draw a triangle with vertex attributes interpolated
-# based on barycentric coordinates with Numpy
+# Rasterize a triangle with vertex attributes interpolated
+# based on barycentric coordinates using Numpy
 #
 
 import numpy as np
@@ -86,24 +86,14 @@ if __name__ == '__main__':
     from matplotlib import pyplot as plt
     resolution = (720, 1280)
 
-    attrib = np.array([[1], [0.5], [1]]).astype(np.float32)
-    coords = []
-    N = 10
-    for i in range(N):
-        for j in range(N):
-            x = i / N
-            y = j / N
-            coords.append([[x, y], [x + 1/N, y + 1/N], [x + 1/N, y]])
-            coords.append([[x, y], [x + 1/N, y + 1/N], [x, y + 1/N]])
-    coords = np.array(coords).astype(np.float32)
-    coords = np.clip(coords, 0.0, 1.0)
+    attrib = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]).astype(np.float32)
+    coords = np.array([[1, 0], [1, 1], [0, 0.5]]).astype(np.float32)
 
     img = np.zeros((resolution[0], resolution[1], attrib.shape[1]))
 
     start = time.time()
 
-    for i in range(coords.shape[0]):
-        draw_triangle(img, coords[i], attrib)
+    draw_triangle(img, coords, attrib)
 
     end = time.time()
     print(f'Time: {end - start}s')
